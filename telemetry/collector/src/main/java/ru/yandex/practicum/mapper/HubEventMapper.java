@@ -1,5 +1,6 @@
 package ru.yandex.practicum.mapper;
 
+import org.springframework.stereotype.Component;
 import ru.yandex.practicum.kafka.telemetry.event.ActionTypeAvro;
 import ru.yandex.practicum.kafka.telemetry.event.ConditionOperationAvro;
 import ru.yandex.practicum.kafka.telemetry.event.ConditionTypeAvro;
@@ -21,6 +22,7 @@ import ru.yandex.practicum.model.hub.ScenarioRemovedEvent;
 
 import java.util.List;
 
+@Component
 public class HubEventMapper {
     public HubEventAvro toAvro(HubEvent event) {
         Object payload = switch (event) {

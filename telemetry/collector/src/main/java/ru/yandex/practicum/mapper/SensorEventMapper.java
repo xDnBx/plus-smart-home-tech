@@ -1,5 +1,6 @@
 package ru.yandex.practicum.mapper;
 
+import org.springframework.stereotype.Component;
 import ru.yandex.practicum.kafka.telemetry.event.ClimateSensorAvro;
 import ru.yandex.practicum.kafka.telemetry.event.LightSensorAvro;
 import ru.yandex.practicum.kafka.telemetry.event.MotionSensorAvro;
@@ -13,6 +14,7 @@ import ru.yandex.practicum.model.sensor.SensorEvent;
 import ru.yandex.practicum.model.sensor.SwitchSensorEvent;
 import ru.yandex.practicum.model.sensor.TemperatureSensorEvent;
 
+@Component
 public class SensorEventMapper {
     public SensorEventAvro toAvro(SensorEvent event) {
         Object payload = switch (event) {

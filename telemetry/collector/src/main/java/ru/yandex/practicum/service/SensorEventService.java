@@ -17,7 +17,7 @@ public class SensorEventService implements EventService<SensorEvent> {
     private final KafkaClient kafkaClient;
     private final SensorEventMapper sensorEventMapper;
 
-    @Value("${kafka.sensor-topic}")
+    @Value("${kafkaSensorTopic:telemetry.sensors.v1}")
     private String topic;
 
     @Override

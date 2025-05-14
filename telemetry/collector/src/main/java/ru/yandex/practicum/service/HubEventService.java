@@ -17,7 +17,7 @@ public class HubEventService implements EventService<HubEvent> {
     private final KafkaClient kafkaClient;
     private final HubEventMapper hubEventMapper;
 
-    @Value("${kafka.hub-topic}")
+    @Value("${kafkaHubTopic:telemetry.hubs.v1}")
     private String topic;
 
     @Override
