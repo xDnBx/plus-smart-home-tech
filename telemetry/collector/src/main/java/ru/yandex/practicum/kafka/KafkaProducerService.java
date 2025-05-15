@@ -2,7 +2,6 @@ package ru.yandex.practicum.kafka;
 
 import org.apache.avro.specific.SpecificRecordBase;
 import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -11,12 +10,13 @@ import org.springframework.stereotype.Service;
 import serializer.AvroSerializer;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.util.Properties;
 
 @Service
 public class KafkaProducerService implements AutoCloseable {
 
-    private final Producer<String, SpecificRecordBase> producer;
+    private final KafkaProducer<String, SpecificRecordBase> producer;
 
     public KafkaProducerService(@Value("${kafka.bootstrap-servers}") String bootstrapServers) {
         Properties config = new Properties();
@@ -27,21 +27,21 @@ public class KafkaProducerService implements AutoCloseable {
         this.producer = new KafkaProducer<>(config);
     }
 
-    public void send(ProducerRecord<String, SpecificRecordBase> record) {
+    public void send(SpecificRecordBase event, String hubId, Instant timestamp, String topic){
+        ProducerRecord<String, SpecificRecordBase> record = new ProducerRecord<>(
+                topic,
+                null,
+                timestamp.toEpochMilli(),
+                hubId,
+                event
+        );
         producer.send(record);
-    }
-
-    public void flush() {
-        if (producer != null) {
-            producer.flush();
-        }
+        producer.flush();
     }
 
     @Override
     public void close() {
-        if (producer != null) {
             producer.flush();
             producer.close(Duration.ofSeconds(5));
-        }
     }
 }
