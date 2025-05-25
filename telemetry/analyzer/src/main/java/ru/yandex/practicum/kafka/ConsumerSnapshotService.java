@@ -1,6 +1,8 @@
 package ru.yandex.practicum.kafka;
 
 import deserializer.SensorsSnapshotDeserializer;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import org.apache.avro.specific.SpecificRecordBase;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -14,12 +16,13 @@ import java.util.List;
 import java.util.Properties;
 
 @Service
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class ConsumerSnapshotService implements AutoCloseable {
 
-    private final KafkaConsumer<String, SpecificRecordBase> consumer;
+    final KafkaConsumer<String, SpecificRecordBase> consumer;
 
     public ConsumerSnapshotService(@Value("${kafka.bootstrap-servers}") String bootstrapServers,
-                                   @Value("${kafka.group-id}kafka.group-id.snapshot") String groupId,
+                                   @Value("${kafka.group-id.snapshot}") String groupId,
                                    @Value("${kafka.auto-commit}") String autoCommit) {
         Properties config = new Properties();
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
@@ -41,6 +44,10 @@ public class ConsumerSnapshotService implements AutoCloseable {
 
     public void commitSync(){
         consumer.commitSync();
+    }
+
+    public void wakeup(){
+        consumer.wakeup();
     }
 
     @Override

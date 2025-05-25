@@ -43,6 +43,10 @@ public class KafkaConsumerService implements AutoCloseable {
         consumer.commitSync();
     }
 
+    public void wakeup(){
+        consumer.wakeup();
+    }
+
     @Override
     public void close() {
         consumer.close();

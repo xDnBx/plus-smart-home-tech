@@ -12,9 +12,10 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:6541/smarthome
-    username: user
-    password: 12345
+    username: smarthome
+    password: smarthome
   jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
     properties:

@@ -34,10 +34,11 @@ public class AggregationStarter {
     String snapshotTopic;
 
     public void start() {
-        log.info("Подписка на топик {}", sensorTopic + "...");
-        consumer.subscribe(List.of(sensorTopic));
-
         try {
+            Runtime.getRuntime().addShutdownHook(new Thread(consumer::wakeup));
+            log.info("Подписка на топик {}", sensorTopic + "...");
+            consumer.subscribe(List.of(sensorTopic));
+
             while (true) {
                 log.info("Ожидание сообщений...");
                 ConsumerRecords<String, SpecificRecordBase> records = consumer.poll(Duration.ofMillis(5000));
@@ -55,7 +56,6 @@ public class AggregationStarter {
                     consumer.commitSync();
                 }
             }
-
         } catch (WakeupException ignored) {
             log.error("Получен WakeupException");
         } catch (Exception e) {

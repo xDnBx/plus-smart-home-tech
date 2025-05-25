@@ -19,7 +19,7 @@ public class ConsumerHubService implements AutoCloseable {
     private final KafkaConsumer<String, SpecificRecordBase> consumer;
 
     public ConsumerHubService(@Value("${kafka.bootstrap-servers}") String bootstrapServers,
-                              @Value("${kafka.group-id}kafka.group-id.hub") String groupId,
+                              @Value("${kafka.group-id.hub}") String groupId,
                               @Value("${kafka.auto-commit}") String autoCommit) {
         Properties config = new Properties();
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
@@ -41,6 +41,10 @@ public class ConsumerHubService implements AutoCloseable {
 
     public void commitSync(){
         consumer.commitSync();
+    }
+
+    public void wakeup(){
+        consumer.wakeup();
     }
 
     @Override
