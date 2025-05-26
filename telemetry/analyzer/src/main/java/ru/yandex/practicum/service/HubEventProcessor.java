@@ -10,34 +10,34 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.common.errors.WakeupException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.kafka.KafkaConsumerService;
-import ru.yandex.practicum.kafka.KafkaProducerService;
-import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
+import ru.yandex.practicum.handler.hub.HubEventHandler;
+import ru.yandex.practicum.handler.hub.HubEventHandlers;
+import ru.yandex.practicum.kafka.ConsumerHubService;
+import ru.yandex.practicum.kafka.telemetry.event.HubEventAvro;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AggregationStarter {
+public class HubEventProcessor implements Runnable {
+    final ConsumerHubService consumer;
+    final HubEventHandlers hubHandlers;
 
-    final KafkaConsumerService consumer;
-    final KafkaProducerService producer;
-    final SensorSnapshotService sensorSnapshotService;
+    @Value("${kafka.topics.hub}")
+    String topic;
 
-    @Value("${kafka.sensor-topic}")
-    String sensorTopic;
-
-    @Value("${kafka.snapshot-topic}")
-    String snapshotTopic;
-
-    public void start() {
+    @Override
+    public void run() {
         try {
             Runtime.getRuntime().addShutdownHook(new Thread(consumer::wakeup));
-            log.info("Подписка на топик {}", sensorTopic + "...");
-            consumer.subscribe(List.of(sensorTopic));
+            log.info("Подписка на топик {}", topic + "...");
+            consumer.subscribe(List.of(topic));
+            log.info("Получение обработчиков...");
+            Map<String, HubEventHandler> hubHandlersMap = hubHandlers.getHandlers();
 
             while (true) {
                 log.info("Ожидание сообщений...");
@@ -46,11 +46,14 @@ public class AggregationStarter {
 
                 if (!records.isEmpty()) {
                     for (ConsumerRecord<String, SpecificRecordBase> record : records) {
-                        SensorEventAvro event = (SensorEventAvro) record.value();
-                        log.info("Обработка события от датчика {}", event);
-                        sensorSnapshotService.updateState(event).ifPresent(snapshot ->
-                                producer.send(snapshotTopic, snapshot.getHubId(), snapshot));
-                        log.info("Событие от датчика {} обработано", event);
+                        HubEventAvro hubEvent = (HubEventAvro) record.value();
+                        String payloadName = hubEvent.getPayload().getClass().getSimpleName();
+
+                        if (hubHandlersMap.containsKey(payloadName)) {
+                            hubHandlersMap.get(payloadName).handle(hubEvent);
+                        } else {
+                            throw new IllegalArgumentException("Невозможно найти обработчик для события: " + hubEvent);
+                        }
                     }
                     log.info("Выполнение фиксации смещений");
                     consumer.commitSync();
@@ -59,11 +62,9 @@ public class AggregationStarter {
         } catch (WakeupException ignored) {
             log.error("Получен WakeupException");
         } catch (Exception e) {
-            log.error("Ошибка во время обработки событий от датчиков", e);
+            log.error("Ошибка во время обработки сообщений", e);
         } finally {
             try {
-                log.info("Сбрасывание всех данных в буфере");
-                producer.flush();
                 log.info("Фиксация смещений");
                 consumer.commitSync();
             } catch (Exception e) {
@@ -71,8 +72,6 @@ public class AggregationStarter {
             } finally {
                 log.info("Закрываем консьюмер");
                 consumer.close();
-                log.info("Закрываем продюсер");
-                producer.close();
             }
         }
     }

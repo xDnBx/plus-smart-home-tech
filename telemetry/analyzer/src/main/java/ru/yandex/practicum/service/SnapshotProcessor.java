@@ -10,9 +10,9 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.common.errors.WakeupException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.kafka.KafkaConsumerService;
-import ru.yandex.practicum.kafka.KafkaProducerService;
-import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
+import ru.yandex.practicum.handler.snapshot.SnapshotHandler;
+import ru.yandex.practicum.kafka.ConsumerSnapshotService;
+import ru.yandex.practicum.kafka.telemetry.event.SensorsSnapshotAvro;
 
 import java.time.Duration;
 import java.util.List;
@@ -21,23 +21,18 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AggregationStarter {
+public class SnapshotProcessor {
+    final ConsumerSnapshotService consumer;
+    final SnapshotHandler snapshotHandler;
 
-    final KafkaConsumerService consumer;
-    final KafkaProducerService producer;
-    final SensorSnapshotService sensorSnapshotService;
-
-    @Value("${kafka.sensor-topic}")
-    String sensorTopic;
-
-    @Value("${kafka.snapshot-topic}")
-    String snapshotTopic;
+    @Value("${kafka.topics.snapshot}")
+    String topic;
 
     public void start() {
         try {
             Runtime.getRuntime().addShutdownHook(new Thread(consumer::wakeup));
-            log.info("Подписка на топик {}", sensorTopic + "...");
-            consumer.subscribe(List.of(sensorTopic));
+            log.info("Подписка на топик {}", topic + "...");
+            consumer.subscribe(List.of(topic));
 
             while (true) {
                 log.info("Ожидание сообщений...");
@@ -46,24 +41,22 @@ public class AggregationStarter {
 
                 if (!records.isEmpty()) {
                     for (ConsumerRecord<String, SpecificRecordBase> record : records) {
-                        SensorEventAvro event = (SensorEventAvro) record.value();
-                        log.info("Обработка события от датчика {}", event);
-                        sensorSnapshotService.updateState(event).ifPresent(snapshot ->
-                                producer.send(snapshotTopic, snapshot.getHubId(), snapshot));
-                        log.info("Событие от датчика {} обработано", event);
+                        SensorsSnapshotAvro sensorsSnapshot = (SensorsSnapshotAvro) record.value();
+                        log.info("Обработка снэпшота {}", sensorsSnapshot);
+                        snapshotHandler.handleSnapshot(sensorsSnapshot);
+                        log.info("Снэпшот {} обработан", sensorsSnapshot);
                     }
                     log.info("Выполнение фиксации смещений");
                     consumer.commitSync();
                 }
             }
+
         } catch (WakeupException ignored) {
             log.error("Получен WakeupException");
         } catch (Exception e) {
-            log.error("Ошибка во время обработки событий от датчиков", e);
+            log.error("Ошибка во время обработки сообщений", e);
         } finally {
             try {
-                log.info("Сбрасывание всех данных в буфере");
-                producer.flush();
                 log.info("Фиксация смещений");
                 consumer.commitSync();
             } catch (Exception e) {
@@ -71,8 +64,6 @@ public class AggregationStarter {
             } finally {
                 log.info("Закрываем консьюмер");
                 consumer.close();
-                log.info("Закрываем продюсер");
-                producer.close();
             }
         }
     }
