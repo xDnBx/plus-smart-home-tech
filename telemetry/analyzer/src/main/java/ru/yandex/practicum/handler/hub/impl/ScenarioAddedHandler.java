@@ -100,6 +100,8 @@ public class ScenarioAddedHandler implements HubEventHandler {
     }
 
     private Integer setValue(Object value) {
+        if (value == null) return null;
+
         if (value instanceof Integer) {
             return (Integer) value;
         } else {
