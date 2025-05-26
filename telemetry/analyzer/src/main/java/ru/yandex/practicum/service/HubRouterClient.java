@@ -18,13 +18,14 @@ public class HubRouterClient {
 
     @GrpcClient("hub-router")
     HubRouterControllerGrpc.HubRouterControllerBlockingStub hubRouter;
+
     final Mapper mapper;
 
     public void sendRequest(Action action) {
         try {
             DeviceActionRequest actionRequest = mapper.toActionRequest(action);
             hubRouter.handleDeviceAction(actionRequest);
-            log.info("Request sent");
+            log.info("Action {} sent", action);
         } catch (Exception e) {
             log.error("Error sending request", e);
         }

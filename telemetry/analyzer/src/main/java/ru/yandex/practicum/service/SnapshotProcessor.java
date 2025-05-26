@@ -35,9 +35,8 @@ public class SnapshotProcessor {
             consumer.subscribe(List.of(topic));
 
             while (true) {
-                Thread.sleep(2000);
                 log.info("Ожидание сообщений...");
-                ConsumerRecords<String, SpecificRecordBase> records = consumer.poll(Duration.ofMillis(1000));
+                ConsumerRecords<String, SpecificRecordBase> records = consumer.poll(Duration.ofMillis(5000));
                 log.info("Получено {} сообщений", records.count());
 
                 if (!records.isEmpty()) {
