@@ -1,6 +1,9 @@
+server:
+  port: 0
+
 spring:
   application:
-    name: analyzer
+    name: shopping-store
   config:
     import: "configserver:"
     cloud:

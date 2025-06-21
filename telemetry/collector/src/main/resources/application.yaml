@@ -8,13 +8,10 @@ spring:
         discovery:
           enabled: true
           serviceId: config-server
-
-cloud:
-  config:
-    fail-fast: true
-    retry:
-      useRandomPolicy: true
-      max-interval: 6000
+        fail-fast: true
+        retry:
+          useRandomPolicy: true
+          max-interval: 6000
 
 eureka:
   client:
