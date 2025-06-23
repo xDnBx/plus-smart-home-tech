@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import ru.yandex.practicum.dto.store.Pageable;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.dto.store.ProductDto;
@@ -31,7 +31,8 @@ public class StoreServiceImpl implements StoreService {
     public List<ProductDto> getProductsByCategory(ProductCategory category, Pageable pageable) {
         log.info("Получение списка товаров по категории = {}", category);
         return storeRepository.findAllByProductCategory(category, pageable).stream()
-                .map(storeMapper::toDto).toList();
+                .map(storeMapper::toDto)
+                .toList();
     }
 
     @Override

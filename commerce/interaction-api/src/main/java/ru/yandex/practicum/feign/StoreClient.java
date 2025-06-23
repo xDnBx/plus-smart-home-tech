@@ -2,8 +2,8 @@ package ru.yandex.practicum.feign;
 
 import feign.FeignException;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.dto.store.Pageable;
 import ru.yandex.practicum.dto.store.ProductDto;
 import ru.yandex.practicum.dto.store.SetProductQuantityStateRequest;
 import ru.yandex.practicum.dto.store.enums.ProductCategory;

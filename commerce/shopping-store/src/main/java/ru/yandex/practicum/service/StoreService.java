@@ -1,9 +1,9 @@
 package ru.yandex.practicum.service;
 
-import ru.yandex.practicum.dto.store.Pageable;
-import ru.yandex.practicum.dto.store.enums.ProductCategory;
+import org.springframework.data.domain.Pageable;
 import ru.yandex.practicum.dto.store.ProductDto;
 import ru.yandex.practicum.dto.store.SetProductQuantityStateRequest;
+import ru.yandex.practicum.dto.store.enums.ProductCategory;
 
 import java.util.List;
 import java.util.UUID;

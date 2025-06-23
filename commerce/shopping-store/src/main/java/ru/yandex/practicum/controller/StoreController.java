@@ -5,8 +5,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.dto.store.Pageable;
 import ru.yandex.practicum.dto.store.ProductDto;
 import ru.yandex.practicum.dto.store.SetProductQuantityStateRequest;
 import ru.yandex.practicum.dto.store.enums.ProductCategory;
@@ -24,7 +24,7 @@ public class StoreController {
     final StoreService storeService;
 
     @GetMapping
-    public List<ProductDto> getProducts(@RequestParam ProductCategory category, Pageable pageable) {
+    public List<ProductDto> getProducts(@RequestParam ProductCategory category, @Valid Pageable pageable) {
         log.info("Получен запрос на список товаров категории = {}", category);
         return storeService.getProductsByCategory(category, pageable);
     }
@@ -48,7 +48,7 @@ public class StoreController {
     }
 
     @PostMapping("/quantityState")
-    public Boolean setQuantityState(@Valid @RequestBody SetProductQuantityStateRequest request) {
+    public Boolean setQuantityState(@Valid SetProductQuantityStateRequest request) {
         log.info("Получен запрос на установку количества товара с id = {}", request.getProductId());
         return storeService.setQuantityState(request);
     }

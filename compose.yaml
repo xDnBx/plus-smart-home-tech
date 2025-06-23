@@ -1,13 +1,23 @@
 services:
-  smart-home-db:
+  smarthome-db:
     image: postgres:16.1
-    container_name: postgres-smarthome
+    container_name: smarthome-db
     ports:
-      - "6541:5432"
+      - "6555:5432"
     environment:
       POSTGRES_DB: smarthome
       POSTGRES_USER: smarthome
       POSTGRES_PASSWORD: smarthome
+
+  commerce-db:
+    image: postgres:16.1
+    container_name: commerce-db
+    ports:
+      - "6554:5432"
+    environment:
+      POSTGRES_DB: commerce
+      POSTGRES_USER: commerce
+      POSTGRES_PASSWORD: commerce
 
   kafka:
     image: confluentinc/confluent-local:7.4.3

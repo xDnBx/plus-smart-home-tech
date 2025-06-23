@@ -1,6 +1,6 @@
 spring:
   application:
-    name: shopping-store
+    name: warehouse
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:6554/commerce

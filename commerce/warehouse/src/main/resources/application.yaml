@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: shopping-cart
+    name: warehouse
   config:
     import: "configserver:"
   cloud:
