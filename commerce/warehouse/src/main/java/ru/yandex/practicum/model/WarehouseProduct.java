@@ -16,12 +16,11 @@ import java.util.UUID;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class WarehouseProduct {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "product_id", nullable = false, unique = true)
     UUID productId;
 
-    @Column(name = "is_fragile", nullable = false)
-    boolean isFragile;
+    @Column(name = "fragile", nullable = false)
+    boolean fragile;
 
     @Embedded
     Dimension dimension;
@@ -30,5 +29,5 @@ public class WarehouseProduct {
     Double weight;
 
     @Column(name = "quantity")
-    Long quantity;
+    long quantity;
 }

@@ -21,15 +21,15 @@ public class ShoppingCart {
     @GeneratedValue(strategy = GenerationType.UUID)
     UUID shoppingCartId;
 
-    @Column(name = "username", nullable = false, unique = true)
+    @Column(name = "username", nullable = false)
     String username;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "cart_items", joinColumns = @JoinColumn(name = "cart_id"))
     @MapKeyColumn(name = "product_id")
     @Column(name = "quantity")
     Map<UUID, Long> products;
 
-    @Column(name = "is_active", nullable = false)
+    @Column(name = "is_active")
     Boolean isActive = true;
 }

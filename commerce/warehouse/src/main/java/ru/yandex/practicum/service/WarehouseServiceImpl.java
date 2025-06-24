@@ -34,7 +34,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     @Override
     @Transactional
     public void newProductInWarehouse(NewProductInWarehouseRequest request) {
-        if (warehouseRepository.existsByProductId(request.getProductId())) {
+        if (warehouseRepository.existsById(request.getProductId())) {
             throw new SpecifiedProductAlreadyInWarehouseException(
                     "Товар уже добавлен на склад с id = " + request.getProductId());
         }
@@ -96,7 +96,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     }
 
     private WarehouseProduct findProductById(UUID productId) {
-        return warehouseRepository.findByProductId(productId)
+        return warehouseRepository.findById(productId)
                 .orElseThrow(() -> new NoSpecifiedProductInWarehouseException(
                         "Не найден на складе товар с id = " + productId));
     }

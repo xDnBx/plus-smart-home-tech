@@ -32,7 +32,8 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public ListProductsResponse getProductsByCategory(ProductCategory category, Pageable pageable) {
         log.info("Получение списка товаров по категории = {}", category);
-        List<ProductDto> products = storeRepository.findAllByProductCategory(category, pageable).stream()
+        List<ProductDto> products = storeRepository.findAllByProductCategoryAndProductState(category,
+                        ProductState.ACTIVE, pageable).stream()
                 .map(storeMapper::toDto)
                 .toList();
         List<SortField> sortFields = pageable.getSort().stream()

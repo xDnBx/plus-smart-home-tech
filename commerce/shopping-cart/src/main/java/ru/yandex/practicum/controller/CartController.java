@@ -11,8 +11,8 @@ import ru.yandex.practicum.dto.cart.ShoppingCartDto;
 import ru.yandex.practicum.feign.CartClient;
 import ru.yandex.practicum.service.CartService;
 
-import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Slf4j
@@ -42,7 +42,7 @@ public class CartController implements CartClient {
     }
 
     @Override
-    public ShoppingCartDto removeFromCart(String username, HashSet<UUID> productIds) {
+    public ShoppingCartDto removeFromCart(String username, Set<UUID> productIds) {
         log.info("Запрос на удаление товаров = {} из корзины пользователя с именем = {}", productIds, username);
         return cartService.removeFromCart(username, productIds);
     }

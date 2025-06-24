@@ -15,6 +15,7 @@ import ru.yandex.practicum.model.ShoppingCart;
 import ru.yandex.practicum.repository.CartRepository;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -39,10 +40,15 @@ public class CartServiceImpl implements CartService {
     @Transactional
     public ShoppingCartDto addProductToCart(String username, Map<UUID, Long> products) {
         checkUser(username);
-        ShoppingCart cart = cartRepository.findByUsername(username)
-                .orElseGet(() -> createNewCart(username));
-        products.forEach((productId, quantity) ->
-                cart.getProducts().merge(productId, quantity, Long::sum));
+        Optional<ShoppingCart> cartOpt = cartRepository.findByUsername(username);
+        ShoppingCart cart;
+        if (cartOpt.isPresent()) {
+            cart = cartOpt.get();
+            products.forEach((productId, quantity) ->
+                    cart.getProducts().merge(productId, quantity, Long::sum));
+        } else {
+            cart = ShoppingCart.builder().username(username).products(products).isActive(true).build();
+        }
         return cartMapper.toDto(cartRepository.save(cart));
     }
 
