@@ -1,6 +1,5 @@
 package ru.yandex.practicum.dto.cart;
 
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -15,10 +14,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ChangeProductQuantityRequest {
-    @NotNull
     UUID productId;
 
-    @NotNull
     @PositiveOrZero(message = "Количество товара должно быть больше нуля")
     Long newQuantity;
 }

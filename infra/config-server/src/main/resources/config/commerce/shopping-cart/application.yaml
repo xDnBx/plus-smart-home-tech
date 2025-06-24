@@ -3,9 +3,9 @@ spring:
     name: shopping-cart
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:6554/commerce
-    username: commerce
-    password: commerce
+    url: jdbc:postgresql://localhost:6553/cart
+    username: cart
+    password: cart
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:

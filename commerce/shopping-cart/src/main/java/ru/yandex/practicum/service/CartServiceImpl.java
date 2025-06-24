@@ -14,8 +14,8 @@ import ru.yandex.practicum.mapper.CartMapper;
 import ru.yandex.practicum.model.ShoppingCart;
 import ru.yandex.practicum.repository.CartRepository;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Slf4j
@@ -59,7 +59,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     @Transactional
-    public ShoppingCartDto removeFromCart(String username, List<UUID> productIds) {
+    public ShoppingCartDto removeFromCart(String username, Set<UUID> productIds) {
         checkUser(username);
         ShoppingCart cart = findCart(username);
         for (UUID productId : productIds) {

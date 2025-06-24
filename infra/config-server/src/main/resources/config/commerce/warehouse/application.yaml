@@ -3,9 +3,9 @@ spring:
     name: warehouse
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:6554/commerce
-    username: commerce
-    password: commerce
+    url: jdbc:postgresql://localhost:6552/warehouse
+    username: warehouse
+    password: warehouse
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:

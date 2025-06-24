@@ -64,7 +64,7 @@ public class WarehouseServiceImpl implements WarehouseService {
                 throw new ProductInShoppingCartLowQuantityInWarehouse(
                         "Не хватает на складе товара с id = " + productId);
             }
-            if (product.getIsFragile()) {
+            if (product.isFragile()) {
                 hasFragile = true;
             }
             double productVolume = calculateVolume(product.getDimension());

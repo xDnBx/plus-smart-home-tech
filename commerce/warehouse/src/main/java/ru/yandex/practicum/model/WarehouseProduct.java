@@ -21,7 +21,7 @@ public class WarehouseProduct {
     UUID productId;
 
     @Column(name = "is_fragile", nullable = false)
-    Boolean isFragile;
+    boolean isFragile;
 
     @Embedded
     Dimension dimension;
@@ -29,6 +29,6 @@ public class WarehouseProduct {
     @Column(name = "weight", nullable = false)
     Double weight;
 
-    @Column(name = "quantity", nullable = false)
+    @Column(name = "quantity")
     Long quantity;
 }

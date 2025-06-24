@@ -3,8 +3,8 @@ package ru.yandex.practicum.service;
 import ru.yandex.practicum.dto.cart.ChangeProductQuantityRequest;
 import ru.yandex.practicum.dto.cart.ShoppingCartDto;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 public interface CartService {
@@ -14,7 +14,7 @@ public interface CartService {
 
     void deleteUserCart(String username);
 
-    ShoppingCartDto removeFromCart(String username, List<UUID> productIds);
+    ShoppingCartDto removeFromCart(String username, Set<UUID> productIds);
 
     ShoppingCartDto changeProductQuantity(String username, ChangeProductQuantityRequest request);
 }

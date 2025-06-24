@@ -7,8 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.yandex.practicum.dto.store.ListProductsResponse;
 import ru.yandex.practicum.dto.store.ProductDto;
 import ru.yandex.practicum.dto.store.SetProductQuantityStateRequest;
+import ru.yandex.practicum.dto.store.SortField;
 import ru.yandex.practicum.dto.store.enums.ProductCategory;
 import ru.yandex.practicum.dto.store.enums.ProductState;
 import ru.yandex.practicum.exception.NotFoundException;
@@ -28,11 +30,15 @@ public class StoreServiceImpl implements StoreService {
     final StoreMapper storeMapper;
 
     @Override
-    public List<ProductDto> getProductsByCategory(ProductCategory category, Pageable pageable) {
+    public ListProductsResponse getProductsByCategory(ProductCategory category, Pageable pageable) {
         log.info("Получение списка товаров по категории = {}", category);
-        return storeRepository.findAllByProductCategory(category, pageable).stream()
+        List<ProductDto> products = storeRepository.findAllByProductCategory(category, pageable).stream()
                 .map(storeMapper::toDto)
                 .toList();
+        List<SortField> sortFields = pageable.getSort().stream()
+                .map(s -> new SortField(s.getProperty(), s.getDirection().name()))
+                .toList();
+        return ListProductsResponse.builder().content(products).sort(sortFields).build();
     }
 
     @Override

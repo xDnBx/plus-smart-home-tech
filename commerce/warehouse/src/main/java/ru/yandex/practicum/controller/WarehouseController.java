@@ -10,6 +10,7 @@ import ru.yandex.practicum.dto.warehouse.AddProductToWarehouseRequest;
 import ru.yandex.practicum.dto.warehouse.AddressDto;
 import ru.yandex.practicum.dto.warehouse.BookedProductsDto;
 import ru.yandex.practicum.dto.warehouse.NewProductInWarehouseRequest;
+import ru.yandex.practicum.feign.WarehouseClient;
 import ru.yandex.practicum.service.WarehouseService;
 
 @Slf4j
@@ -17,25 +18,25 @@ import ru.yandex.practicum.service.WarehouseService;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/warehouse")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class WarehouseController {
+public class WarehouseController implements WarehouseClient {
     final WarehouseService warehouseService;
 
-    @PutMapping
-    public void newProductInWarehouse(@RequestBody NewProductInWarehouseRequest request) {
+    @Override
+    public void newProductInWarehouse(NewProductInWarehouseRequest request) {
         warehouseService.newProductInWarehouse(request);
     }
 
-    @PostMapping("/check")
-    public BookedProductsDto checkProductQuantity(@RequestBody ShoppingCartDto shoppingCart) {
+    @Override
+    public BookedProductsDto checkProductQuantity(ShoppingCartDto shoppingCart) {
         return warehouseService.checkProductQuantity(shoppingCart);
     }
 
-    @PostMapping("/add")
-    public void addProductToWarehouse(@RequestBody AddProductToWarehouseRequest request) {
+    @Override
+    public void addProductToWarehouse(AddProductToWarehouseRequest request) {
         warehouseService.addProductToWarehouse(request);
     }
 
-    @GetMapping("/address")
+    @Override
     public AddressDto getWarehouseAddress() {
         return warehouseService.getWarehouseAddress();
     }
