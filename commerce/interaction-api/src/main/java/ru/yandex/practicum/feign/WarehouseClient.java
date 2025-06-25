@@ -1,6 +1,7 @@
 package ru.yandex.practicum.feign;
 
 import feign.FeignException;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -10,7 +11,9 @@ import ru.yandex.practicum.dto.warehouse.AddProductToWarehouseRequest;
 import ru.yandex.practicum.dto.warehouse.AddressDto;
 import ru.yandex.practicum.dto.warehouse.BookedProductsDto;
 import ru.yandex.practicum.dto.warehouse.NewProductInWarehouseRequest;
+import ru.yandex.practicum.feign.fallback.WarehouseClientFallback;
 
+@FeignClient(name = "warehouse", path = "/api/v1/warehouse", fallback = WarehouseClientFallback.class)
 public interface WarehouseClient {
     @PutMapping
     void newProductInWarehouse(@RequestBody NewProductInWarehouseRequest request) throws FeignException;

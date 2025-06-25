@@ -46,6 +46,12 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handleWarehouseUnavailable(WarehouseUnavailableException e) {
+        return new ErrorResponse("Warehouse is not available", e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleException(Exception e) {
         return new ErrorResponse("An error occurred", e.getMessage());
     }

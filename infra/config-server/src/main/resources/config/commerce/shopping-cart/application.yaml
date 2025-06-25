@@ -14,3 +14,34 @@ spring:
       hibernate:
         format_sql: true
     show-sql: true
+  cloud:
+    openfeign:
+      circuitbreaker:
+        enabled: true
+        alphanumeric-ids:
+          enabled: true
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      WarehouseClientcheckProductQuantity:
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10000
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowType: COUNT_BASED
+        minimumNumberOfCalls: 5
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+
+server:
+  port: 0
+
+logging:
+  level:
+    root: INFO
+    org:
+      zalando:
+        logbook: TRACE
+    org.springframework.web: INFO
+    org.hibernate.SQL: WARN
+    your.application.package: DEBUG
