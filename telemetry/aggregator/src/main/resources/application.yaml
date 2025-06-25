@@ -1,20 +1,17 @@
 spring:
   application:
-    name: collector
+    name: aggregator
   config:
     import: "configserver:"
-    cloud:
-      config:
-        discovery:
-          enabled: true
-          serviceId: config-server
-
-cloud:
-  config:
-    fail-fast: true
-    retry:
-      useRandomPolicy: true
-      max-interval: 6000
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        serviceId: config-server
+      fail-fast: true
+      retry:
+        useRandomPolicy: true
+        max-interval: 6000
 
 eureka:
   client:
