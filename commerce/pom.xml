@@ -16,6 +16,8 @@
         <module>shopping-cart</module>
         <module>shopping-store</module>
         <module>warehouse</module>
+        <module>order</module>
+        <module>delivery</module>
     </modules>
 
 </project>
