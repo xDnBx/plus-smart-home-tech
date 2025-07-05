@@ -12,7 +12,7 @@ import ru.yandex.practicum.dto.delivery.enums.DeliveryState;
 import ru.yandex.practicum.dto.order.OrderDto;
 import ru.yandex.practicum.dto.warehouse.AddressDto;
 import ru.yandex.practicum.dto.warehouse.ShippedToDeliveryRequest;
-import ru.yandex.practicum.exception.NotFoundException;
+import ru.yandex.practicum.exception.NoDeliveryFoundException;
 import ru.yandex.practicum.feign.OrderClient;
 import ru.yandex.practicum.feign.WarehouseClient;
 import ru.yandex.practicum.mapper.DeliveryMapper;
@@ -125,6 +125,6 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     private Delivery findDelivery(UUID deliveryId) {
         return deliveryRepository.findById(deliveryId)
-                .orElseThrow(() -> new NotFoundException("Доставка с id = " + deliveryId + " не найдена"));
+                .orElseThrow(() -> new NoDeliveryFoundException("Доставка с id = " + deliveryId + " не найдена"));
     }
 }

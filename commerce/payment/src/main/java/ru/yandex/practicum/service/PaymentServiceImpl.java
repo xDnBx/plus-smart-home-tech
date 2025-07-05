@@ -11,8 +11,8 @@ import ru.yandex.practicum.dto.order.OrderDto;
 import ru.yandex.practicum.dto.payment.PaymentDto;
 import ru.yandex.practicum.dto.payment.enums.PaymentStatus;
 import ru.yandex.practicum.dto.store.ProductDto;
+import ru.yandex.practicum.exception.NoPaymentFoundException;
 import ru.yandex.practicum.exception.NotEnoughInfoInOrderToCalculateException;
-import ru.yandex.practicum.exception.NotFoundException;
 import ru.yandex.practicum.feign.OrderClient;
 import ru.yandex.practicum.feign.StoreClient;
 import ru.yandex.practicum.mapper.PaymentMapper;
@@ -104,6 +104,6 @@ public class PaymentServiceImpl implements PaymentService {
 
     private Payment findPayment(UUID paymentId) {
         return paymentRepository.findById(paymentId)
-                .orElseThrow(() -> new NotFoundException("Платеж с id = " + paymentId + " не найден"));
+                .orElseThrow(() -> new NoPaymentFoundException("Платеж с id = " + paymentId + " не найден"));
     }
 }
