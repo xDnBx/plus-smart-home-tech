@@ -39,6 +39,36 @@ services:
       POSTGRES_USER: warehouse
       POSTGRES_PASSWORD: warehouse
 
+  delivery-db:
+    image: postgres:16.1
+    container_name: delivery-db
+    ports:
+      - "6551:5432"
+    environment:
+      POSTGRES_DB: delivery
+      POSTGRES_USER: delivery
+      POSTGRES_PASSWORD: delivery
+
+  payment-db:
+    image: postgres:16.1
+    container_name: payment-db
+    ports:
+      - "6550:5432"
+    environment:
+      POSTGRES_DB: payment
+      POSTGRES_USER: payment
+      POSTGRES_PASSWORD: payment
+
+  order-db:
+    image: postgres:16.1
+    container_name: order-db
+    ports:
+      - "6549:5432"
+    environment:
+      POSTGRES_DB: order
+      POSTGRES_USER: order
+      POSTGRES_PASSWORD: order
+
   kafka:
     image: confluentinc/confluent-local:7.4.3
     hostname: kafka

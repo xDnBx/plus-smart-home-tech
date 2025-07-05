@@ -51,6 +51,30 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleNoOrderFound(NoOrderFoundException e) {
+        return new ErrorResponse("Order not found", e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleNotEnoughInfoInOrderToCalculate(NotEnoughInfoInOrderToCalculateException e) {
+        return new ErrorResponse("Not enough info to calculate payment", e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleNoDeliveryFound(NoDeliveryFoundException e) {
+        return new ErrorResponse("Delivery not found", e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleNoPaymentFound(NoPaymentFoundException e) {
+        return new ErrorResponse("Payment not found", e.getMessage());
+    }
+
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleException(Exception e) {
         return new ErrorResponse("An error occurred", e.getMessage());
