@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: delivery
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:6551/delivery
+    username: delivery
+    password: delivery
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+
+delivery:
+  base_rate: 5.0
+  address_rate: 2
+  fragile_rate: 0.2
+  weight_rate: 0.3
+  volume_rate: 0.2
+  street_rate: 0.2
+
+server:
+  port: 0
+
+logging:
+  level:
+    root: INFO
+    org:
+      zalando:
+        logbook: TRACE
+    org.springframework.web: INFO
+    org.hibernate.SQL: WARN

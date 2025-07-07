@@ -19,6 +19,9 @@ logbook:
 
 logging:
   level:
+    root: INFO
     org:
       zalando:
         logbook: TRACE
+    org.springframework.web: INFO
+    org.hibernate.SQL: WARN
