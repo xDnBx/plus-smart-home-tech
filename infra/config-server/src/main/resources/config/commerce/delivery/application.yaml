@@ -34,4 +34,3 @@ logging:
         logbook: TRACE
     org.springframework.web: INFO
     org.hibernate.SQL: WARN
-    your.application.package: DEBUG

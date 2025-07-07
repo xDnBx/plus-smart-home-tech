@@ -27,4 +27,13 @@ public class DeliveryDto {
 
     @NotBlank
     DeliveryState deliveryState;
+
+    @NotBlank
+    Double weight;
+
+    @NotBlank
+    Double volume;
+
+    @NotBlank
+    boolean fragile;
 }

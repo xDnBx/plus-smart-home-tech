@@ -35,4 +35,8 @@ public class Delivery {
     @Enumerated(EnumType.STRING)
     @Column(name = "delivery_state")
     DeliveryState deliveryState;
+
+    Double weight;
+    Double volume;
+    boolean fragile;
 }

@@ -43,7 +43,7 @@ public class PaymentServiceImpl implements PaymentService {
         checkCosts(orderDto);
         Payment payment = Payment.builder()
                 .orderId(orderDto.getOrderId())
-                .totalPayment(orderDto.getTotalPrice())
+                .totalPayment(calculateTotalCost(orderDto))
                 .deliveryTotal(orderDto.getDeliveryPrice())
                 .feeTotal(orderDto.getTotalPrice() * feeRate)
                 .paymentStatus(PaymentStatus.PENDING)
@@ -55,7 +55,11 @@ public class PaymentServiceImpl implements PaymentService {
     public Double calculateTotalCost(OrderDto orderDto) {
         log.info("Расчитываем общую стоимость заказа с id = {}", orderDto.getOrderId());
         checkCosts(orderDto);
-        return orderDto.getProductPrice() + orderDto.getProductPrice() * feeRate + orderDto.getDeliveryPrice();
+        Payment payment = findPayment(orderDto.getPaymentId());
+        Double totalCost = orderDto.getProductPrice() + orderDto.getProductPrice() * feeRate + orderDto.getDeliveryPrice();
+        payment.setTotalPayment(totalCost);
+        paymentRepository.save(payment);
+        return totalCost;
     }
 
     @Override
